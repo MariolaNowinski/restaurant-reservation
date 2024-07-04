@@ -1,16 +1,30 @@
 # Pseudocode
 
-## Initialisierung
+## Datenstruktur
 
-1. Tische initialisieren:
+### Öffnungszeiten definieren 
+1. 
+    - erstelle ein Objekt `openingHours`, das die Öffnungs- und Schließzeiten für jeden Wochentag enthält
+    - Montags ist das Restaurant geschlossen (open und close sind null) 
+ 
+
+### Initialisierung
+
+2. Tische initialisieren:
     - erstelle eine Liste `tables`mit 20 Tischen, jeder Tisch hat eine `tableId` und `seats = 4`
-2. Reservierungen initialisieren:
+3. Reservierungen initialisieren:
     - erstelle eine leere Liste `reservations`für die Reservierungen
 
-## Reservierung hinzufügen
+## Funktionen
+
+### Reservierung hinzufügen
 
 1. Funktion ` addReservation(name, date, time, numberOfPeople)`:
-    - rufe `checkAvailability(date, time, numberOfPeople) ` auf, um verfügbare Tische zu finden
+    - prüfe, ob die Reservierung innerhalb der Öffnungszeiten liegt, indem `isWithinOpeningHours(date, time)` aufgerufen wird
+    - wenn die Reservierung außerhalb der Öffnungszeiten liegt:
+        - gib eine Nachricht aus, dass die Reservierung nicht möglich ist
+    - wenn die Reservierung innerhalb der Öffnungszeiten liegt:
+        - rufe `checkAvailability(date, time, numberOfPeople)`auf, um verfügbare Tische zu finden
     - wenn verfügbare Tische gefuden werden:
         - berechne `endTime` basierend auf `time` und `numberOfPeople` mit `calculateEndTime(time, numberOfPeople)`
         - erstelle eine neue Reservierung mit den Attributten: `id`, `name`, `date`, `startTime`, `endTime`, `tableIds`, `numberOfPeople`
@@ -19,7 +33,7 @@
     - andernfalls:
         - gib eine Meldung aus, dass keine Tische verfügbar sind
 
-## Endzeit berechnen
+### Endzeit berechnen
 
 2. Funktion `calculateEndTime(startTime, numberOfPeople)`
     - wenn `numberOfPeople >=80`:
@@ -27,7 +41,7 @@
     - andernfalls:
         - berechne `endTime`als `startTime + 2 Stunden` 
 
-## Verfügbarkeit prüfen
+### Verfügbarkeit prüfen
 
 3. Funktion `checkAvailability(date, time, numberOfPeople)`:
     - bestimme die Anzahl benötigter Tische `neededTables = numberOfPeople / 4`
@@ -40,28 +54,42 @@
     - wenn nicht genügend Tische verfügbar sind:
         - gib `null` zurück
 
-## Reservierungen anzeigen
+### Öffnungszeiten prüfen
 
-4. Funktion `showReservations()`:
+4. Funktion `isWithinOpeningHours(date, time)`:
+    - ermittle den Wochentag für `date`
+    - hol die Öffnungs- und Schließzeiten für diesen Wochentag aus dem `openingHours`- Objekt 
+    - wenn der Tag geschlossen ist oder `time` außerhalb der Öffnungs- und Schließzeiten liegt:
+        - gib `false`zurück
+    andernfalls:
+        - gib `true`zurück
+
+### Reservierungen anzeigen
+
+5. Funktion `showReservations()`:
     - gib alle Reservierungen in der Liste `reservations`aus, einschließlich `name`, `tableIds`, `date`, `startTime`, `endTime`, `numberOfPeople`
 
-## Reservierung aktualisieren
+### Reservierung aktualisieren
 
-5. Funktion `updateReservation(id, newDate, newTime, newNumberOfPeople)`:
-    - suche die Reservierung mit `id` in `reservations`
-    - wenn die Reservierung gefunden wird:
-        - rufe `checkAvailability(newDate, newTime, newNumberOfPeople)`auf
-        - wenn verfügbare Tische gefunden werden:
-            - aktualisiere die Reservierung mit `newDate`, `newTime`, `calculateEndTime(newTime, newNumberOfPeople)`, `newNumberOfPeople`, `availableTables`
-            - gib eine Bestätigung aus
-        - andernfalls:
-            - gib eine Meldung aus, dass keine Tische verfügbar sind
-    - wenn die Reservierung nicht gefunden wird:
-        - gib eine Fehlermeldung aus
+6. Funktion `updateReservation(id, newDate, newTime, newNumberOfPeople)`:
+    - prüfe, ob die neue Reservierung innerhalb der Öffnungszeiten liegt, indem `isWithinOpeningHours(newDate, newTime)`aufgerufen wird
+    - wenn die Reservierung außerhalb der Öffnungzeiten liegt:
+        - gib eine Nachricht aus, dass die Reservierung nicht möglich ist
+    - wenn die Reservierung innerhalb der Öffnungszeiten liegt:
+        - suche die Reservierung mit `id` in `reservations`
+        - wenn die Reservierung gefunden wird:
+            - rufe `checkAvailability(newDate, newTime, newNumberOfPeople)`auf
+            - wenn verfügbare Tische gefunden werden:
+                - aktualisiere die Reservierung mit `newDate`, `newTime`, `calculateEndTime(newTime, newNumberOfPeople)`, `newNumberOfPeople`, `availableTables`
+                - gib eine Bestätigung aus
+            - andernfalls:
+                - gib eine Meldung aus, dass keine Tische verfügbar sind
+        - wenn die Reservierung nicht gefunden wird:
+            - gib eine Fehlermeldung aus
 
-## Reservierung löschen
+### Reservierung löschen
 
-6. Funktion `deleteReservation(id)`:
+7. Funktion `deleteReservation(id)`:
     - suche die Reservierung mit `id`in `reservations`
     - wenn die Reservierung gefunden wird:
         - entferne die Reservierung aus `reservations`
@@ -69,9 +97,9 @@
     - wenn die Reservierung nicht gefunden wird:
         - gib eine Fehlermeldung aus
 
-## Interaktive Benutzereingabe
+### Interaktive Benutzereingabe
 
-7. Interaktiver Modus:
+8. Interaktiver Modus:
     - initialisiere eine Eingabeaufforderung
     - wiederhole:
         - frage den Benutzer nach der gewünschten Aktion (add/update/delete/show/exit)
