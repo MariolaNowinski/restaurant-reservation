@@ -31,11 +31,13 @@ const reservations = [];
 function addReservation(name, date, time, numberOfPeople) {
 
     if (isInPast(date, time)) {
-        return `Datum oder Uhrzeit liegt in der Vergangenheit.`;
+        console.log(`Datum oder Uhrzeit liegt in der Vergangenheit.`);
+        return;
     }
 
     if (!isWithinOpeningHours(date, time)) {
-        return `Die Reservierung liegt außerhalb der Öffnungszeiten.`;
+        console.log(`Die Reservierung liegt außerhalb der Öffnungszeiten.`);
+        return;
     }
     const {availableTables, totalAvailableTables, totalAvailableSeats}= checkAvailability(date, time, numberOfPeople);
 
@@ -50,12 +52,12 @@ function addReservation(name, date, time, numberOfPeople) {
             numberOfPeople
         };
         reservations.push(reservation);
-        return `Reservierung erfolgreich hinzugefügt:`, reservation;
+        console.log(`Reservierung erfolgreich hinzugefügt:`, reservation);
     } else {
         if (totalAvailableTables === 0) {
-            return `Leider gibt es zu diesem Zeitpunkt keine freien Tische mehr.`;
+            console.log(`Leider gibt es zu diesem Zeitpunkt keine freien Tische mehr.`);
         } else {
-            return `Leider gibt es zu diesem Zeitpunkt nur noch ${totalAvailableTables} Tische und ${totalAvailableSeats} Stühle frei.`;
+            console.log(`Leider gibt es zu diesem Zeitpunkt nur noch ${totalAvailableTables} Tische und ${totalAvailableSeats} Stühle frei.`);
         }
     }
 }
@@ -103,11 +105,11 @@ function checkAvailability(date, time, numberOfPeople) {
     }
     return {availableTables: availableTables.slice(0, neededTables), totalAvailableTables, totalAvailableSeats};
 }
-console.log(addReservation("Mariola", "2024-07-05", "17:30", 3)); 
-console.log(addReservation("Ola", "2024-07-05", "17:40", 9)); 
-console.log(addReservation("Aneta", "2024-07-05", "17:30", 48)); 
-console.log(addReservation("klara", "2024-07-05", "17:15", 21)); 
-console.log(addReservation("Manfred", "2024-07-05", "17:45", 7)); 
+addReservation("Mariola", "2024-07-05", "17:30", 3);
+addReservation("Ola", "2024-07-05", "17:40", 9);
+addReservation("Aneta", "2024-07-05", "17:30", 48);
+addReservation("klara", "2024-07-05", "17:15", 21); 
+addReservation("Manfred", "2024-07-05", "17:45", 7); 
 
 // Öffnungszeiten prüfen
 
@@ -120,11 +122,11 @@ function isWithinOpeningHours(date, time) {
     }
     return time >= hours.open && time <= hours.close;
 }
-console.log(addReservation("Maria Marianska", "2024-07-04", "16:30", 5)); 
-console.log(addReservation("John Doe", "2024-07-04", "16:00", 6));
-console.log(addReservation("herbert", "2024-07-04", "18:10", 4)); 
-console.log(addReservation("Julia", "2024-07-05", "11:00", 5)); 
-console.log(addReservation("Felix", "2024-07-07", "10:15", 2)); 
+addReservation("Maria Marianska", "2024-07-04", "16:30", 5); 
+addReservation("John Doe", "2024-07-05", "16:00", 6);
+addReservation("herbert", "2024-07-04", "18:10", 4); 
+addReservation("Julia", "2024-07-05", "11:00", 5); 
+addReservation("Felix", "2024-07-07", "10:15", 2); 
 
 // Aktuelles Datum und Uhrzeit prüfen
 
@@ -139,20 +141,22 @@ function isInPast(date, time) {
 function showReservations() {
     console.log(`Aktuelle Reservierungen:`);
     for (const reservation of reservations) {
-        return `Reservierung ${reservation.id}: ${reservation.name} hat die Tische ${reservation.tableIds.join(", ")} für ${reservation.numberOfPeople} Personen am ${reservation.date} von ${reservation.startTime} bis ${reservation.endTime} Uhr reserviert.`;
+        console.log(`Reservierung ${reservation.id}: ${reservation.name} hat die Tische ${reservation.tableIds.join(", ")} für ${reservation.numberOfPeople} Personen am ${reservation.date} von ${reservation.startTime} bis ${reservation.endTime} Uhr reserviert.`);
     }
 }
-console.log(showReservations()); 
+showReservations(); 
 
 // Reservierung aktualisieren
 
 function updateReservation(id, newDate, newTime, newNumberOfPeople) {
     if (isInPast(newDate, newTime)) {
-        return `Datum oder Uhrzeit liegt in der Vergangenheit.`;
+        console.log(`Datum oder Uhrzeit liegt in der Vergangenheit.`);
+        return;
         
     }
     if (!isWithinOpeningHours(newDate, newTime)) {
-        return `Die Reservierung liegt außerhalb der Öffnungszeiten.`;
+        console.log(`Die Reservierung liegt außerhalb der Öffnungszeiten.`);
+        return;
     }
     for (const reservation of reservations) {
         if (reservation.id === id) {
@@ -165,23 +169,41 @@ function updateReservation(id, newDate, newTime, newNumberOfPeople) {
                 reservation.numberOfPeople = newNumberOfPeople;
                 reservation.tableIds = availableTables.map(table => table.tableId);
                 reservations.push(reservation);
-                return `Reservierung erfolgreich aktualisiert:`, reservation;
+                console.log(`Reservierung erfolgreich aktualisiert:`,reservation); 
             } else {
                 reservations.push(reservation);
                 if (totalAvailableTables === 0) {
-                    return `Leider gibt es zu diesem Zeitpunkt keine freien Tische mehr.`;
+                    console.log(`Leider gibt es zu diesem Zeitpunkt keine freien Tische mehr.`); 
                 } else {
-                    return `Leider gibt es zu diesem Zeitpunkt nur noch ${totalAvailableTables} Tische und ${totalAvailableSeats} Stühle frei.`;
+                    console.log(`Leider gibt es zu diesem Zeitpunkt nur noch ${totalAvailableTables} Tische und ${totalAvailableSeats} Stühle frei.`);
                 }
             }
+            return;
         }
     }
     
-    return `Reservierung nicht gefunden`;
+    console.log(`Reservierung nicht gefunden`); 
 } 
 
-console.log(updateReservation(1, "2024-07-04", "21:30", 4)); 
-console.log(showReservations()); 
+updateReservation(1, "2024-07-06", "21:00", 5);
+showReservations();
+
+// Reservierung löschen
+
+function deleteReservation(id) {
+    for (let i = 0; i < reservations.length; i++) {
+        if (reservations[i].id === id) {
+            reservations.splice(i, 1);
+            console.log(`Reservierung ${id} wurde gelöscht.`);
+            return;
+        }
+    }
+    console.log(`Reservierung nicht gefunden.`);
+}
+
+deleteReservation(5);
+showReservations();
+
 
 
 
