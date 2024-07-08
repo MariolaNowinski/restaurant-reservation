@@ -66,7 +66,7 @@ function addReservation(name, date, time, numberOfPeople) {
 
 function calculateEndTime(startTime, numberOfPeople) {
     if (numberOfPeople >= 80) {
-        return "23:59";                                         
+        return `23:59`;                                         
     }
     const [hours, minutes] = startTime.split(":").map(Number);
     const endTime = new Date();
@@ -105,11 +105,11 @@ function checkAvailability(date, time, numberOfPeople) {
     }
     return {availableTables: availableTables.slice(0, neededTables), totalAvailableTables, totalAvailableSeats};
 }
-addReservation("Mariola", "2024-07-05", "17:30", 3);
-addReservation("Ola", "2024-07-05", "17:40", 9);
-addReservation("Aneta", "2024-07-05", "17:30", 48);
-addReservation("klara", "2024-07-05", "17:15", 21); 
-addReservation("Manfred", "2024-07-05", "17:45", 7); 
+//addReservation("Mariola", "2024-07-05", "17:30", 3);
+//addReservation("Ola", "2024-07-05", "17:40", 9);
+//addReservation("Aneta", "2024-07-05", "17:30", 48);
+//addReservation("klara", "2024-07-05", "17:15", 21); 
+//addReservation("Manfred", "2024-07-05", "17:45", 7); 
 
 // Öffnungszeiten prüfen
 
@@ -122,11 +122,11 @@ function isWithinOpeningHours(date, time) {
     }
     return time >= hours.open && time <= hours.close;
 }
-addReservation("Maria Marianska", "2024-07-04", "16:30", 5); 
-addReservation("John Doe", "2024-07-05", "16:00", 6);
-addReservation("herbert", "2024-07-04", "18:10", 4); 
-addReservation("Julia", "2024-07-05", "11:00", 5); 
-addReservation("Felix", "2024-07-07", "10:15", 2); 
+//addReservation("Maria Marianska", "2024-07-04", "16:30", 5); 
+//addReservation("John Doe", "2024-07-05", "16:00", 6);
+//addReservation("herbert", "2024-07-04", "18:10", 4); 
+//addReservation("Julia", "2024-07-05", "11:00", 5); 
+//addReservation("Felix", "2024-07-07", "10:15", 2); 
 
 // Aktuelles Datum und Uhrzeit prüfen
 
@@ -144,7 +144,7 @@ function showReservations() {
         console.log(`Reservierung ${reservation.id}: ${reservation.name} hat die Tische ${reservation.tableIds.join(", ")} für ${reservation.numberOfPeople} Personen am ${reservation.date} von ${reservation.startTime} bis ${reservation.endTime} Uhr reserviert.`);
     }
 }
-showReservations(); 
+//showReservations(); 
 
 // Reservierung aktualisieren
 
@@ -185,8 +185,8 @@ function updateReservation(id, newDate, newTime, newNumberOfPeople) {
     console.log(`Reservierung nicht gefunden`); 
 } 
 
-updateReservation(1, "2024-07-06", "21:00", 5);
-showReservations();
+//updateReservation(1, "2024-07-06", "21:00", 5);
+//showReservations();
 
 // Reservierung löschen
 
@@ -201,8 +201,40 @@ function deleteReservation(id) {
     console.log(`Reservierung nicht gefunden.`);
 }
 
-deleteReservation(5);
-showReservations();
+//deleteReservation(5);
+//showReservations();
+
+// Interaktive Benutzereingabe
+
+function promptUser() {
+    while (true) {
+        const action = rls.question(`Was möchten Sie tun? (add/update/delete/show/exit): `);
+        if (action === "add") {
+            const name = rls.question(`Name: `);
+            const date = rls.question(`Datum (YYYY-MM-DD): `);
+            const time = rls.question(`Uhrzeit (HH:MM): `);
+            const numberOfPeople = parseInt(rls.question(`Personenanzahl: `), 10);
+            addReservation(name, date, time, numberOfPeople);
+        } else if (action === "update") {
+            const id = parseInt(rls.question(`Reservierungs-ID: `), 10);
+            const newDate = rls.question(`Neues Datum (YYYY-MM-DD): `);
+            const newTime = rls.question(`Neue Uhrzeit (HH:MM): `);
+            const newNumberOfPeople = parseInt(rls.question(`Neue Personenanzahl: `), 10);
+            updateReservation(id, newDate, newTime, newNumberOfPeople);
+        } else if (action === "delete") {
+            const id = parseInt(rls.question(`Reservierungs-ID: `), 10);
+            deleteReservation(id);
+        } else if (action === "show") {
+            showReservations();
+        } else if (action === "exit") {
+            break;
+        } else {
+            console.log(`Ungültige Aktion.`);
+        }
+    }
+}
+
+promptUser();
 
 
 
